@@ -1,11 +1,19 @@
 # src/dominio/empleado.py
 class Empleado:
-    def __init__(self, nombre: str, correo: str):
+    contador_id = 0
+    def __init__(self, id_empleado: str, nombre: str, direccion: str, numero: int, correo: str, fecha_contrato: int, salario: int, cargo: int):
+        Empleado.contador_id =+  1
+        self.id_empleado = Empleado.contador_id
         self.nombre = nombre
+        self.direccion = direccion
+        self.numero = numero
         self.correo = correo
-
+        self.fecha_contrato = fecha_contrato
+        self.salario = salario
+        self.cargo = cargo
     def mostrar_datos(self) -> str:
-        return f"{self.nombre} - {self.correo}"
+        return f"{self.id_empleado} - {self.nombre} - {self.direccion} - {self.numero} - {self.correo} - {self.fecha_contrato} - {self.salario} - {self.cargo}"
+    
     def calcular_pago(self) -> float:
         raise NotImplementedError    
 

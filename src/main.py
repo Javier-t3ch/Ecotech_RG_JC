@@ -5,8 +5,25 @@ from dominio.proyecto import Proyecto
 
 
 empleado_ana = Empleado(
-    nombre="Ana Torres",
-    correo="ana.torres@ecotech.cl"
+    id_empleado = "",
+    nombre= "Ana Torres",
+    direccion= "Calle #123",
+    numero= "56912345678",
+    correo= "ana.torres@correo.cl",
+    fecha_contrato= "15/05/26",
+    salario= 1232153,
+    cargo= 1
+)
+
+empleado_javer = Empleado(
+    id_empleado = "",
+    nombre= "javier Torres",
+    direccion= "Calle #123",
+    numero= "56912345678",
+    correo= "ana.torres@correo.cl",
+    fecha_contrato= "15/05/26",
+    salario= 1232153,
+    cargo= 1
 )
 
 desarrollo = Departamento(
@@ -15,6 +32,7 @@ desarrollo = Departamento(
 
 empleado_p = Proyecto(
     nombre= "Proyecto: 'Alcatraz'"
+    
 )
 
 dep1 = Departamento(
@@ -24,6 +42,7 @@ dep1 = Departamento(
 Gerente = Departamento(
     nombre= "Nombre Gerente: Javier , "
 )
+
 
 # Uso desde main.py
 desarrollo.agregar_empleado(empleado_ana)
