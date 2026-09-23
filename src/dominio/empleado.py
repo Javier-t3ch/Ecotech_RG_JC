@@ -1,17 +1,15 @@
 class Empleado:
-    contador_id = 0
 
-    def __init__(self, nombre, direccion, numero, correo, fecha_contrato, salario, cargo):
-        Empleado.contador_id += 1
-        self._id_empleado = f"E{Empleado.contador_id}"
+    def __init__(self, nombre, direccion, numero, correo, fecha_contrato, salario, cargo, id=None ):
+        self._id= id
         self._nombre = nombre
-        self._direccion = direccion
-        self._numero = numero
+#        self._direccion = direccion
+#        self._numero = numero
         self._correo = correo
-        self._fecha_contrato = fecha_contrato
-        self._salario = salario
-        self._cargo = cargo
-        self._registros_tiempo = []
+#        self._fecha_contrato = fecha_contrato
+#        self._salario = salario
+#        self._cargo = cargo
+#        self._registros_tiempo = []
 
     def mostrar_datos(self):
         return f"{self._id_empleado} - {self._nombre} - {self._direccion} - {self._numero} - {self._correo} - {self._fecha_contrato} - {self._salario} - {self._cargo}"
