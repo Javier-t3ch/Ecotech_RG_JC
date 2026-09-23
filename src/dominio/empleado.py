@@ -1,22 +1,32 @@
-# src/dominio/empleado.py
 class Empleado:
     contador_id = 0
-    def __init__(self, id_empleado: str, nombre: str, direccion: str, numero: int, correo: str, fecha_contrato: int, salario: int, cargo: int):
-        Empleado.contador_id =+  1
-        self.id_empleado = Empleado.contador_id
-        self.nombre = nombre
-        self.direccion = direccion
-        self.numero = numero
-        self.correo = correo
-        self.fecha_contrato = fecha_contrato
-        self.salario = salario
-        self.cargo = cargo
-    def mostrar_datos(self) -> str:
-        return f"{self.id_empleado} - {self.nombre} - {self.direccion} - {self.numero} - {self.correo} - {self.fecha_contrato} - {self.salario} - {self.cargo}"
-    
-    def calcular_pago(self) -> float:
-        raise NotImplementedError    
 
+    def __init__(self, nombre, direccion, numero, correo, fecha_contrato, salario, cargo):
+        Empleado.contador_id += 1
+        self._id_empleado = f"E{Empleado.contador_id}"
+        self._nombre = nombre
+        self._direccion = direccion
+        self._numero = numero
+        self._correo = correo
+        self._fecha_contrato = fecha_contrato
+        self._salario = salario
+        self._cargo = cargo
+        self._registros_tiempo = []
+
+    def mostrar_datos(self):
+        return f"{self._id_empleado} - {self._nombre} - {self._direccion} - {self._numero} - {self._correo} - {self._fecha_contrato} - {self._salario} - {self._cargo}"
+
+    def ver_salario(self):
+        return self._salario
+
+    def registrar_horas(self, registro):
+        self._registros_tiempo.append(registro)
+        return True
+
+
+"""
+    def calcular_pago(self) -> float:
+        raise NotImplementedError
 class EmpleadoMensual(Empleado):
     def __init__(self, sueldo: float):
         self.sueldo = sueldo
@@ -27,4 +37,4 @@ class EmpleadoPorHora(Empleado):
         self.horas = horas
         self.valor_hora = valor_hora
     def calcular_pago(self) -> float:
-        return self.horas * self.valor_hora
+        return self.horas * self.valor_hora"""

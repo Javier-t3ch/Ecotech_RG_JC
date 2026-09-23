@@ -1,19 +1,23 @@
-from dominio.empleado import Empleado
+class RegistroTiempo:
+    def __init__(self, id_registro, horas_trabajadas, fecha_trabajada, descripcion_tarea, empleado, proyecto):
+        self._id_registro = id_registro
+        self._horas_trabajadas = horas_trabajadas
+        self._fecha_trabajada = fecha_trabajada
+        self._descripcion_tarea = descripcion_tarea
+        self._empleado = empleado
+        self._proyecto = proyecto
 
-class registroTiempo:
-    def __init__(self, tiempo: str):
-        self.tiempo = 
-        self._empleados: list[Empleado] = []
+    def calculo_horas(self, registros):
+        total_horas = 0
+        for registro in registros:
+            if registro._empleado._id_empleado == self._empleado._id_empleado:
+                total_horas += registro._horas_trabajadas
+        return total_horas
 
-    def agregar_empleado(self, empleado: Empleado) -> bool:
-        if empleado in self._empleados:
-            return False
-
-        self._empleados.append(empleado)
-        return True
-# Dentro de Departamento
-    @property
-    def empleados(self) -> tuple:
-        return tuple(self._empleados)
-    def cantidad_empleados(self) -> int:
-        return len(self._empleados)
+    def calculo_horas_proyecto(self, registros, proyecto):
+        total_horas = 0
+        for registro in registros:
+            if (registro._empleado._id_empleado == self._empleado._id_empleado
+                    and registro._proyecto._id_proyecto == proyecto._id_proyecto):
+                total_horas += registro._horas_trabajadas
+        return total_horas
