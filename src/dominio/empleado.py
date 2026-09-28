@@ -12,7 +12,8 @@ class Empleado:
 #        self._registros_tiempo = []
 
     def mostrar_datos(self):
-        return f"{self._id_empleado} - {self._nombre} - {self._direccion} - {self._numero} - {self._correo} - {self._fecha_contrato} - {self._salario} - {self._cargo}"
+        #return f"{self._id_empleado} - {self._nombre} - {self._direccion} - {self._numero} - {self._correo} - {self._fecha_contrato} - {self._salario} - {self._cargo}"
+        return f"{self._id} - {self._nombre} "
 
     def ver_salario(self):
         return self._salario

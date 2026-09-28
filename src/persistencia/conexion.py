@@ -5,6 +5,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+def marcador_sql():
+    if obtener_motor() == "sqlite":
+        return "?"
+    return "%s"
+
 def obtener_motor():
     return os.getenv("DB_ENGINE", "sqlite").lower()
 

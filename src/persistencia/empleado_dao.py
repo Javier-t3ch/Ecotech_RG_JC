@@ -1,8 +1,20 @@
 # persistencia/empleado_dao.py
-from persistencia.conexion import abrir_conexion, obtener_motor
-
+from persistencia.conexion import abrir_conexion, obtener_motor, marcador_sql
+from dominio.empleado import Empleado
 class EmpleadoDAO:
     @staticmethod
+    def _fila_a_empleado(fila):
+        return Empleado(
+            id=fila[0],
+            nombre=fila[1],
+            correo=fila[2],
+            direccion='',
+            numero='',
+            fecha_contrato='',
+            salario='',
+            cargo=''
+        )
+    
     def insertar(empleado):
         conexion = abrir_conexion()
         cursor = conexion.cursor()
@@ -16,4 +28,41 @@ class EmpleadoDAO:
         empleado._id = cursor.lastrowid
         conexion.commit()
         conexion.close()
-        return empleado
+        return empleado 
+    
+    def buscar_por_id(id_empleado):
+        conexion = abrir_conexion()
+        cursor = conexion.cursor()
+
+        marca = marcador_sql()
+        sql = f"""
+                SELECT id, nombre, correo 
+                FROM empleado WHERE id = {marca}
+                """
+        cursor.execute(sql, (id_empleado,))
+        fila = cursor.fetchone()
+        conexion.close()
+        
+        if fila is None:
+            return None
+
+        return EmpleadoDAO._fila_a_empleado(fila)
+    
+    def listar():
+        conexion = abrir_conexion()
+        cursor = conexion.cursor()
+
+        cursor.execute(
+        "SELECT id, nombre, correo FROM empleado"
+    )
+
+        filas = cursor.fetchall()
+        conexion.close()
+
+        empleados = []
+
+        for fila in filas:
+            empleados.append(
+                EmpleadoDAO._fila_a_empleado(fila)
+            )
+        return empleados
