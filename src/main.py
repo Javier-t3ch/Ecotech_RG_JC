@@ -1,5 +1,4 @@
 # src/main.py
-from dominio.empleado import Empleado
 from dominio.departamento import Departamento
 from dominio.proyecto import Proyecto
 from dominio.Gestion_departamento import GestionDepartamento
@@ -28,10 +27,10 @@ print("Después:", empleado_ana._id)
 # id generado por la BD
 """
 empleado_ana = Empleado(
-    nombre= "Ana Torres",
+    nombre= "Miguel Bosse",
     direccion= "Calle #123",
     numero= "56912345678",
-    correo= "ana.torres@correo.cl",
+    correo= "Miguelito_rico.negroBosse@correo.cl",
     fecha_contrato= "15/05/26",
     salario= 1232153,
     cargo= "Recursos Humanos"
