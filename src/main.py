@@ -41,6 +41,19 @@ EmpleadoDAO.insertar(empleado_ana)
 encontrado = EmpleadoDAO.buscar_por_id(empleado_ana._id)
 print("Encontrado:", encontrado)
 
+
 print("Listado:")
 for item in EmpleadoDAO.listar():
     print(item.mostrar_datos())
+
+try:
+    actualizado = EmpleadoDAO.actualizar(empleado_ana)
+
+    if actualizado:
+        print("Empleado actualizado correctamente.")
+    else:
+        print("Empleado no encontrado.")
+except Exception:
+    print(
+        "no fue posible completar la operacion"
+    )
