@@ -1,37 +1,34 @@
 # persistencia/empleado_dao.py
 from persistencia.conexion import abrir_conexion, obtener_motor, marcador_sql
-from dominio.empleado import Empleado
+from dominio.proyecto import Proyecto
 class EmpleadoDAO:
     @staticmethod
     def _fila_a_empleado(fila):
-        return Empleado(
+        return Proyecto(
             id=fila[0],
             nombre=fila[1],
-            correo=fila[2],
-            direccion=fila[3],
-            numero='',
-            fecha_contrato='',
-            salario='',
-            cargo=''
+            fecha_inicio=fila[2],
+            descripcion=fila[3],
+
         )
 
-    def insertar(empleado):
+    def insertar(proyecto):
         conexion = abrir_conexion()
         cursor = conexion.cursor()
         marcador = "?" if obtener_motor() == "sqlite" else "%s"
 
         sql = f"""
-            INSERT INTO empleado (nombre, correo, direccion)
+            INSERT INTO proyecto (nombre, fecha_inicio, descripcion)
             VALUES ({marcador}, {marcador}, {marcador})
         """
-        cursor.execute(sql, (empleado._nombre, empleado._correo, empleado._direccion))
-        empleado._id = cursor.lastrowid
+        cursor.execute(sql, (proyecto._nombre, proyecto._fecha_inicio, proyecto._descripcion))
+        proyecto._id = cursor.lastrowid
         conexion.commit()
         conexion.close()
-        return empleado 
+        return proyecto 
     
 
-    def actualizar(empleado):
+    def actualizar(proyecto):
         conexion = None
         try:
             conexion = abrir_conexion()
@@ -39,18 +36,18 @@ class EmpleadoDAO:
 
             marca = marcador_sql()
             sql = (
-                "UPDATE empleado "
-                f"SET nombre = {marca}, correo = {marca}, direccion{marca} "
+                "UPDATE proyecto "
+                f"SET nombre = {marca}, fecha_inicio = {marca}, descripcion = {marca} "
                 f"WHERE id = {marca}"
             )
 
             cursor.execute(
                 sql,
             (
-                empleado.nombre,
-                empleado.correo,
-                empleado.direccion,
-                empleado.id
+                proyecto.nombre,
+                proyecto.fecha_inicio,
+                proyecto.descripcion,
+                proyecto.id
             
             )
         )
@@ -91,7 +88,7 @@ class EmpleadoDAO:
 
             marca = marcador_sql()
             sql = f"""
-                    SELECT id, nombre, correo, direccion 
+                    SELECT id, nombre, correo 
                     FROM empleado WHERE id = {marca}
                     """
             cursor.execute(sql, (id_empleado,))
@@ -106,7 +103,7 @@ class EmpleadoDAO:
         cursor = conexion.cursor()
 
         cursor.execute(
-        "SELECT id, nombre, correo, direccion FROM empleado"
+        "SELECT id, nombre, correo FROM empleado"
     )
 
         filas = cursor.fetchall()

@@ -3,7 +3,7 @@ class Empleado:
     def __init__(self, nombre, direccion, numero, correo, fecha_contrato, salario, cargo, id=None ):
         self._id= id
         self._nombre = nombre
-#        self._direccion = direccion
+        self._direccion = direccion
 #        self._numero = numero
         self._correo = correo
 #        self._fecha_contrato = fecha_contrato
@@ -13,7 +13,7 @@ class Empleado:
 
     def mostrar_datos(self):
         #return f"{self._id_empleado} - {self._nombre} - {self._direccion} - {self._numero} - {self._correo} - {self._fecha_contrato} - {self._salario} - {self._cargo}"
-        return f"{self._id} - {self._nombre} - {self._correo} "
+        return f"{self._id} - {self._nombre} - {self._correo} - {self._direccion}"
 
     def ver_salario(self):
         return self._salario
