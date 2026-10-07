@@ -1,7 +1,7 @@
 class Empleado:
 
     def __init__(self, nombre, direccion, numero, correo, fecha_contrato, salario, cargo, id=None ):
-        self._id= id
+        self._id = id
         self._nombre = nombre
         self._direccion = direccion
 #        self._numero = numero

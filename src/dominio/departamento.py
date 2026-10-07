@@ -1,15 +1,16 @@
 from dominio.empleado import Empleado
-
+from dominio.proyecto import Proyecto
 
 class Departamento:
     contador_id = 0
 
-    def __init__(self, nombre: str):
+    def __init__(self, nombre, empleados, proyectos, id_departamento: None):
         Departamento.contador_id += 1
-        self._id_departamento = f"D{Departamento.contador_id}"
+        self._id_departamento = id_departamento
         self._nombre = nombre
         self._empleados: list[Empleado] = []
-        self._proyectos = []
+        self._proyectos = [Proyecto]
+
 
     def contratar_empleado(self, empleado: Empleado, encargado: Empleado) -> bool:
         if encargado._cargo != "Recursos Humanos":
