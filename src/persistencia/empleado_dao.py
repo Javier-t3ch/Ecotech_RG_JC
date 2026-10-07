@@ -1,33 +1,32 @@
 # persistencia/empleado_dao.py
 from persistencia.conexion import abrir_conexion, obtener_motor, marcador_sql
-from dominio.departamento import Departamento
-class DepartamentoDAO:
+from dominio.empleado import Empleado
+class EmpleadoDAO:
     @staticmethod
-    def _fila_de_departamento(fila):
-        return Departamento(
-            id_departamento=fila[0],
+    def _fila_a_empleado(fila):
+        return Empleado(
+            id=fila[0],
             nombre=fila[1],
-            empleados=fila[2],
-            proyectos=fila[3],    
+            correo=fila[2]    
         )
 
-    def insertar(departamento):
+    def insertar(empleado):
         conexion = abrir_conexion()
         cursor = conexion.cursor()
         marcador = "?" if obtener_motor() == "sqlite" else "%s"
 
         sql = f"""
-            INSERT INTO empleado (nombre, empleados, proyectos)
-            VALUES ({marcador}, {marcador}, {marcador})
+            INSERT INTO empleado (nombre, correo)
+            VALUES ({marcador}, {marcador})
         """
-        cursor.execute(sql, (departamento._nombre, departamento._empleados, departamento._proyectos))
-        departamento._id = cursor.lastrowid
+        cursor.execute(sql, (empleado._nombre, empleado._correo))
+        empleado._id = cursor.lastrowid
         conexion.commit()
         conexion.close()
-        return departamento 
+        return empleado 
     
 
-    def actualizar(departamento):
+    def actualizar(empleado):
         conexion = None
         try:
             conexion = abrir_conexion()
@@ -36,17 +35,16 @@ class DepartamentoDAO:
             marca = marcador_sql()
             sql = (
                 "UPDATE empleado "
-                f"SET nombre = {marca}, empleados = {marca}, proyectos = {marca}"
+                f"SET nombre = {marca}, correo = {marca} "
                 f"WHERE id = {marca}"
             )
 
             cursor.execute(
                 sql,
             (
-                departamento.nombre,
-                departamento.empleados,
-                departamento.proyecto,
-                departamento.id
+                empleado.nombre,
+                empleado.correo,
+                empleado.id
             
             )
         )
@@ -63,37 +61,37 @@ class DepartamentoDAO:
             if conexion:
                 conexion.close()
 
-    def eliminar(id_departamento):
+    def eliminar(id_empleado):
         conexion = abrir_conexion()
         cursor = conexion.cursor()
 
         marca = marcador_sql()
         sql = (
-            "DELETE FROM Departamento "
+            "DELETE FROM empleado "
         f"WHERE id = {marca}"
         )
 
-        cursor.execute(sql,(id_departamento,))
+        cursor.execute(sql,(id_empleado,))
         conexion.commit()
 
         eliminado = cursor.rowcount > 0
         conexion.close()
         return eliminado
 
-    def buscar_por_id(id_departamento):
+    def buscar_por_id(id_empleado):
         try:
             conexion = abrir_conexion()
             cursor = conexion.cursor()
 
             marca = marcador_sql()
             sql = f"""
-                    SELECT id, nombre, empleados, proyectos 
-                    FROM departmanto WHERE id = {marca}
+                    SELECT id, nombre, correo 
+                    FROM empleado WHERE id = {marca}
                     """
-            cursor.execute(sql, (id_departamento,))
+            cursor.execute(sql, (id_empleado,))
             fila = cursor.fetchone()
             conexion.close()
-            return DepartamentoDAO._fila_de_departamento(fila)
+            return EmpleadoDAO._fila_a_empleado(fila)
         except Exception as e:
             print(f"error: {e}")
 
@@ -102,16 +100,16 @@ class DepartamentoDAO:
         cursor = conexion.cursor()
 
         cursor.execute(
-        "SELECT id, nombre, empleados, proyectos FROM departamento"
+        "SELECT id, nombre, correo FROM empleado"
     )
 
         filas = cursor.fetchall()
         conexion.close()
 
-        Departamento = []
+        empleados = []
 
         for fila in filas:
-            Departamento.append(
-                DepartamentoDAO._fila_a_empleado(fila)
+            empleados.append(
+                EmpleadoDAO._fila_a_empleado(fila)
             )
-        return Departamento
+        return empleados
