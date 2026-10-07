@@ -112,6 +112,6 @@ class DepartamentoDAO:
 
         for fila in filas:
             Departamento.append(
-                DepartamentoDAO._fila_a_empleado(fila)
+                DepartamentoDAO._fila_de_departamento(fila)
             )
         return Departamento

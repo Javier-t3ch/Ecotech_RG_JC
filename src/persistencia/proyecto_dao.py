@@ -1,9 +1,9 @@
 # persistencia/empleado_dao.py
 from persistencia.conexion import abrir_conexion, obtener_motor, marcador_sql
 from dominio.proyecto import Proyecto
-class EmpleadoDAO:
+class ProyectoDao:
     @staticmethod
-    def _fila_a_empleado(fila):
+    def _fila_a_proyecto(fila):
         return Proyecto(
             id=fila[0],
             nombre=fila[1],
@@ -64,37 +64,37 @@ class EmpleadoDAO:
             if conexion:
                 conexion.close()
 
-    def eliminar(id_empleado):
+    def eliminar(id_proyecto):
         conexion = abrir_conexion()
         cursor = conexion.cursor()
 
         marca = marcador_sql()
         sql = (
-            "DELETE FROM empleado "
+            "DELETE FROM proyecto "
         f"WHERE id = {marca}"
         )
 
-        cursor.execute(sql,(id_empleado,))
+        cursor.execute(sql,(id_proyecto,))
         conexion.commit()
 
         eliminado = cursor.rowcount > 0
         conexion.close()
         return eliminado
 
-    def buscar_por_id(id_empleado):
+    def buscar_por_id(id_proyecto):
         try:
             conexion = abrir_conexion()
             cursor = conexion.cursor()
 
             marca = marcador_sql()
             sql = f"""
-                    SELECT id, nombre, correo 
+                    SELECT id, nombre, fecha_inicio, descripcion 
                     FROM empleado WHERE id = {marca}
                     """
-            cursor.execute(sql, (id_empleado,))
+            cursor.execute(sql, (id_proyecto,))
             fila = cursor.fetchone()
             conexion.close()
-            return EmpleadoDAO._fila_a_empleado(fila)
+            return ProyectoDao._fila_a_proyecto(fila)
         except Exception as e:
             print(f"error: {e}")
 
@@ -103,16 +103,16 @@ class EmpleadoDAO:
         cursor = conexion.cursor()
 
         cursor.execute(
-        "SELECT id, nombre, correo FROM empleado"
+        "SELECT id, nombre, fecha_inicio, descripcion FROM proyecto"
     )
 
         filas = cursor.fetchall()
         conexion.close()
 
-        empleados = []
+        proyectos = []
 
         for fila in filas:
-            empleados.append(
-                EmpleadoDAO._fila_a_empleado(fila)
+            proyectos.append(
+                ProyectoDao._fila_a_proyecto(fila)
             )
-        return empleados
+        return proyectos
