@@ -1,120 +1,150 @@
-from persistencia.conexion import abrir_conexion, obtener_motor, marcador_sql
+from persistencia.conexion import abrir_conexion, marcador_sql
 from dominio.registroTiempo import RegistroTiempo
+from persistencia.empleado_dao import EmpleadoDAO
+from persistencia.proyecto_dao import ProyectoDao
+
 
 class RegistroTiempoDAO:
+
     @staticmethod
     def _fila_de_registroTiempo(fila):
+        empleado = EmpleadoDAO.buscar_por_id(fila[4])
+        proyecto = ProyectoDao.buscar_por_id(fila[5])
+        if empleado is None or proyecto is None:
+            raise ValueError("El registro tiene un empleado o proyecto inexistente")
         return RegistroTiempo(
             id_registro=fila[0],
             horas_trabajadas=fila[1],
             fecha_trabajada=fila[2],
             descripcion_tarea=fila[3],
-            empleado=fila[4],
-            proyecto=fila[5]    
+            empleado=empleado,
+            proyecto=proyecto
         )
 
     def insertar(registroTiempo):
-        conexion = abrir_conexion()
-        cursor = conexion.cursor()
-        marcador = "?" if obtener_motor() == "sqlite" else "%s"
-
-        sql = f"""
-            INSERT INTO registroTiempo (horas_trabajadas, fecha_trabajada, descripcion_tarea, empleado, proyecto)
-            VALUES ({marcador}, {marcador}, {marcador}, {marcador}, {marcador})
-        """
-        cursor.execute(sql, (registroTiempo._horas_trabajada, registroTiempo._fecha_trabajada, registroTiempo._descripcion_tarea, registroTiempo._empleadom, registroTiempo._proyecto))
-        registroTiempo._id_registro = cursor.lastrowid
-        conexion.commit()
-        conexion.close()
-        return registroTiempo 
-    
-
-    def actualizar(registroTiempo):
+        if registroTiempo._empleado is None or registroTiempo._proyecto is None:
+            return False
+        if registroTiempo._empleado._id is None or registroTiempo._proyecto._id_proyecto is None:
+            return False
+        if registroTiempo._horas_trabajadas <= 0:
+            return False
         conexion = None
         try:
             conexion = abrir_conexion()
             cursor = conexion.cursor()
-
             marca = marcador_sql()
             sql = (
-                "UPDATE empleado "
-                f"SET horas_trabajadas = {marca}, fecha_trabajada = {marca}, descripcion_tarea = {marca}, empleado = {marca}, proyecto = {marca}"
-                f"WHERE id = {marca}"
+                "INSERT INTO registro_tiempo "
+                "(horas_trabajadas, fecha_trabajada, descripcion_tarea, empleado_id, proyecto_id) "
+                f"VALUES ({marca}, {marca}, {marca}, {marca}, {marca})"
             )
-
-            cursor.execute(
-                sql,
-            (
-                registroTiempo.horas_trabajadas,
-                registroTiempo.fecha_trabajadas,
-                registroTiempo.descripcion_tarea,
-                registroTiempo.empleado,
-                registroTiempo.proyecto
-            
-            )
-        )
-    
+            cursor.execute(sql, (
+                registroTiempo._horas_trabajadas,
+                registroTiempo._fecha_trabajada,
+                registroTiempo._descripcion_tarea,
+                registroTiempo._empleado._id,
+                registroTiempo._proyecto._id_proyecto
+            ))
             conexion.commit()
-            return cursor.rowcount > 0
-        
+            registroTiempo._id_registro = cursor.lastrowid
+            return registroTiempo
         except Exception:
             if conexion:
                 conexion.rollback()
             raise
-        
+        finally:
+            if conexion:
+                conexion.close()
+
+    def actualizar(registroTiempo):
+        if registroTiempo._empleado is None or registroTiempo._proyecto is None:
+            return False
+        if registroTiempo._empleado._id is None or registroTiempo._proyecto._id_proyecto is None:
+            return False
+        if registroTiempo._horas_trabajadas <= 0:
+            return False
+        conexion = None
+        try:
+            conexion = abrir_conexion()
+            cursor = conexion.cursor()
+            marca = marcador_sql()
+            sql = (
+                "UPDATE registro_tiempo SET "
+                f"horas_trabajadas = {marca}, fecha_trabajada = {marca}, "
+                f"descripcion_tarea = {marca}, empleado_id = {marca}, "
+                f"proyecto_id = {marca} WHERE id = {marca}"
+            )
+            cursor.execute(sql, (
+                registroTiempo._horas_trabajadas,
+                registroTiempo._fecha_trabajada,
+                registroTiempo._descripcion_tarea,
+                registroTiempo._empleado._id,
+                registroTiempo._proyecto._id_proyecto,
+                registroTiempo._id_registro
+            ))
+            actualizado = cursor.rowcount > 0
+            conexion.commit()
+            return actualizado
+        except Exception:
+            if conexion:
+                conexion.rollback()
+            raise
         finally:
             if conexion:
                 conexion.close()
 
     def eliminar(id_registro):
-        conexion = abrir_conexion()
-        cursor = conexion.cursor()
-
-        marca = marcador_sql()
-        sql = (
-            "DELETE FROM registroTiempo "
-        f"WHERE id = {marca}"
-        )
-
-        cursor.execute(sql,(id_registro,))
-        conexion.commit()
-
-        eliminado = cursor.rowcount > 0
-        conexion.close()
-        return eliminado
-
-    def buscar_por_id(id_registro):
+        conexion = None
         try:
             conexion = abrir_conexion()
             cursor = conexion.cursor()
-
             marca = marcador_sql()
-            sql = f"""
-                    SELECT id, horas_trabajadas, fecha_trabajada, descripcion_tarea, empleado, proyecto 
-                    FROM departmanto WHERE id = {marca}
-                    """
+            sql = f"DELETE FROM registro_tiempo WHERE id = {marca}"
+            cursor.execute(sql, (id_registro,))
+            eliminado = cursor.rowcount > 0
+            conexion.commit()
+            return eliminado
+        except Exception:
+            if conexion:
+                conexion.rollback()
+            raise
+        finally:
+            if conexion:
+                conexion.close()
+
+    def buscar_por_id(id_registro):
+        conexion = None
+        try:
+            conexion = abrir_conexion()
+            cursor = conexion.cursor()
+            marca = marcador_sql()
+            sql = (
+                "SELECT id, horas_trabajadas, fecha_trabajada, descripcion_tarea, "
+                f"empleado_id, proyecto_id FROM registro_tiempo WHERE id = {marca}"
+            )
             cursor.execute(sql, (id_registro,))
             fila = cursor.fetchone()
-            conexion.close()
+            if fila is None:
+                return None
             return RegistroTiempoDAO._fila_de_registroTiempo(fila)
-        except Exception as e:
-            print(f"error: {e}")
+        finally:
+            if conexion:
+                conexion.close()
 
     def listar():
-        conexion = abrir_conexion()
-        cursor = conexion.cursor()
-
-        cursor.execute(
-        "SELECT id, horas_trabajadas, fecha_trabajada, descripcion_tarea, empleado, proyecto FROM departamento"
-    )
-
-        filas = cursor.fetchall()
-        conexion.close()
-
-        RegistroTiempo = []
-
-        for fila in filas:
-            RegistroTiempo.append(
-                RegistroTiempoDAO._fila_de_registroTiempo(fila)
+        conexion = None
+        try:
+            conexion = abrir_conexion()
+            cursor = conexion.cursor()
+            cursor.execute(
+                "SELECT id, horas_trabajadas, fecha_trabajada, descripcion_tarea, "
+                "empleado_id, proyecto_id FROM registro_tiempo"
             )
-        return RegistroTiempo
+            filas = cursor.fetchall()
+            registros = []
+            for fila in filas:
+                registros.append(RegistroTiempoDAO._fila_de_registroTiempo(fila))
+            return registros
+        finally:
+            if conexion:
+                conexion.close()
