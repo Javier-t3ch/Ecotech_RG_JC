@@ -1,5 +1,5 @@
 class RegistroTiempo:
-    def __init__(self, id_registro, horas_trabajadas, fecha_trabajada, descripcion_tarea, empleado, proyecto):
+    def __init__(self, horas_trabajadas, fecha_trabajada, descripcion_tarea, empleado, proyecto, id_registro=None):
         self._id_registro = id_registro
         self._horas_trabajadas = horas_trabajadas
         self._fecha_trabajada = fecha_trabajada
@@ -7,17 +7,18 @@ class RegistroTiempo:
         self._empleado = empleado
         self._proyecto = proyecto
 
+
     def calculo_horas(self, registros):
         total_horas = 0
         for registro in registros:
-            if registro._empleado._id_empleado == self._empleado._id_empleado:
+            if registro._empleado == self._empleado:
                 total_horas += registro._horas_trabajadas
         return total_horas
 
     def calculo_horas_proyecto(self, registros, proyecto):
         total_horas = 0
         for registro in registros:
-            if (registro._empleado._id_empleado == self._empleado._id_empleado
-                    and registro._proyecto._id_proyecto == proyecto._id_proyecto):
+            if (registro._empleado == self._empleado
+                    and registro._proyecto == proyecto):
                 total_horas += registro._horas_trabajadas
         return total_horas
