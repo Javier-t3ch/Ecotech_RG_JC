@@ -13,7 +13,6 @@ class DepartamentoDAO:
             nombre=fila[1],
             id_gerente=fila[2]
         )
-        # Recupera las asociaciones almacenadas, no solo los datos de la tabla principal.
         conexion = abrir_conexion()
         try:
             cursor = conexion.cursor()
@@ -132,7 +131,6 @@ class DepartamentoDAO:
 
     @staticmethod
     def _cambiar_relacion(tabla, id_departamento, columna, id_objeto, agregar):
-        # tabla y columna se pasan solamente como literales desde los metodos de abajo.
         if id_departamento is None or id_objeto is None:
             return False
         conexion = None

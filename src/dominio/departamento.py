@@ -13,7 +13,6 @@ class Departamento:
         self._proyectos = []
 
 
-# REVISAR, TIENE QUE VINCULARSE CON PERMISO Y USUARIO
 
     def contratar_empleado(self, empleado: Empleado, encargado: Empleado) -> bool:
         if empleado is None or encargado is None:
