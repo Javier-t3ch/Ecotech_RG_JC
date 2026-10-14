@@ -1,7 +1,7 @@
 from dominio.departamento import Departamento
 from persistencia.departamento_dao import DepartamentoDAO
 from persistencia.empleado_dao import EmpleadoDAO
-
+from complementos.complementos import limpiar_pantalla
 
 def mostrar_menu_departementos():
     print("\n===== DEPARTAMENTOS - ECOTECH =====")
@@ -17,6 +17,7 @@ def main_departamento():
     while True:
         mostrar_menu_departementos()
         opcion = input("Seleccione una opcion: ")
+        limpiar_pantalla()
 
         if opcion == "1":
             try:

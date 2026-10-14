@@ -9,7 +9,7 @@ class RegistroTiempoDAO:
     @staticmethod
     def _fila_de_registroTiempo(fila):
         empleado = EmpleadoDAO.buscar_por_id(fila[4])
-        proyecto = ProyectoDao.buscar_por_id(fila[5])
+        proyecto = ProyectoDao.buscar_por_id(fila[5], cargar_relaciones=False)
         if empleado is None or proyecto is None:
             raise ValueError("El registro tiene un empleado o proyecto inexistente")
         return RegistroTiempo(

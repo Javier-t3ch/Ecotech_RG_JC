@@ -1,5 +1,5 @@
 from datetime import date
-
+from complementos.complementos import limpiar_pantalla
 from dominio.registroTiempo import RegistroTiempo
 from persistencia.empleado_dao import EmpleadoDAO
 from persistencia.proyecto_dao import ProyectoDao
@@ -20,27 +20,37 @@ def menu_dominio_empleado():
         opcion = input("Seleccione una opcion: ")
 
         if opcion == "0":
+            
+            limpiar_pantalla()
             return
 
         elif opcion == "5":
+            limpiar_pantalla()
             main_empleado()
 
         elif opcion in ("1", "2", "3", "4"):
             try:
+                limpiar_pantalla()
                 id_empleado = int(input("ID del empleado: "))
                 empleado = EmpleadoDAO.buscar_por_id(id_empleado)
 
                 if empleado is None:
                     print("Empleado no encontrado.")
+                    input("Presione Enter para continuar...")
+                    limpiar_pantalla()
                     continue
 
                 if opcion == "1":
                     print(empleado.mostrar_datos())
                     print("Telefono:", empleado._numero)
                     print("Fecha de contrato:", empleado._fecha_contrato)
+                    input("Presione Enter para continuar...")
+                    limpiar_pantalla()
 
                 elif opcion == "2":
                     print("Salario:", empleado.ver_salario())
+                    input("Presione Enter para continuar...")
+                    limpiar_pantalla()
 
                 elif opcion == "3":
                     id_proyecto = int(input("ID del proyecto: "))
@@ -48,6 +58,8 @@ def menu_dominio_empleado():
 
                     if proyecto is None:
                         print("Proyecto no encontrado.")
+                        input("Presione Enter para continuar...")
+                        limpiar_pantalla()
                         continue
 
                     horas = int(input("Horas trabajadas: "))
@@ -61,6 +73,8 @@ def menu_dominio_empleado():
                     descripcion = input("Descripcion de la tarea: ").strip()
                     if descripcion == "":
                         print("La descripcion no puede quedar vacia.")
+                        input("Presione Enter para continuar...")
+                        limpiar_pantalla()
                         continue
 
                     registro = RegistroTiempo(
@@ -76,8 +90,12 @@ def menu_dominio_empleado():
                     if guardado:
                         print("Horas registradas correctamente.")
                         print("ID del registro:", registro._id_registro)
+                        input("Presione Enter para continuar...")
+                        limpiar_pantalla()
                     else:
                         print("No se pudieron guardar las horas.")
+                        input("Presione Enter para continuar...")
+                        limpiar_pantalla()
 
                 elif opcion == "4":
                     registros = RegistroTiempoDAO.listar()
@@ -96,15 +114,24 @@ def menu_dominio_empleado():
                                 "| Tarea:", registro._descripcion_tarea
                             )
 
+
                     if encontrados:
                         print("Total de horas registradas:", total_horas)
+                        input("Presione Enter para continuar...")
+                        limpiar_pantalla()
                     else:
                         print("Este empleado no tiene horas registradas.")
 
             except ValueError as error:
                 print("Datos incorrectos:", error)
+                input("Presione Enter para continuar...")
+                limpiar_pantalla()
             except Exception as error:
                 print("Ocurrio un error:", error)
+                input("Presione Enter para continuar...")
+                limpiar_pantalla()
 
         else:
             print("Opcion no valida.")
+            input("Presione Enter para continuar...")
+            limpiar_pantalla()

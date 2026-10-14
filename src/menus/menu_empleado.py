@@ -1,6 +1,7 @@
 from datetime import date
 from dominio.empleado import Empleado
 from persistencia.empleado_dao import EmpleadoDAO
+from complementos.complementos import limpiar_pantalla
 
 
 def mostrar_menu_empleado():
@@ -15,6 +16,7 @@ def mostrar_menu_empleado():
 
 def main_empleado():
     while True:
+        limpiar_pantalla()
         mostrar_menu_empleado()
         opcion = input("Seleccione una opcion: ")
 
@@ -38,6 +40,7 @@ def main_empleado():
         elif opcion == "2":
             try:
                 empleados = EmpleadoDAO.listar()
+                limpiar_pantalla()
                 if not empleados:
                     print("No hay empleados registrados.")
                 else:
@@ -123,6 +126,7 @@ def main_empleado():
                 print("Error al eliminar el empleado:", error)
 
         elif opcion == "0":
+            limpiar_pantalla()
             return
         else:
             print("Opcion no valida.")
