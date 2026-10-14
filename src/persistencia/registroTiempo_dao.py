@@ -7,6 +7,26 @@ from persistencia.proyecto_dao import ProyectoDao
 class RegistroTiempoDAO:
 
     @staticmethod
+    def _asignacion_valida(cursor, marca, id_empleado, id_proyecto):
+        cursor.execute(
+            f"SELECT 1 FROM proyecto_empleado WHERE empleado_id = {marca} AND proyecto_id = {marca}",
+            (id_empleado, id_proyecto)
+        )
+        return cursor.fetchone() is not None
+
+    @staticmethod
+    def empleado_asignado(id_empleado, id_proyecto):
+        conexion = abrir_conexion()
+        try:
+            cursor = conexion.cursor()
+            marca = marcador_sql()
+            return RegistroTiempoDAO._asignacion_valida(
+                cursor, marca, id_empleado, id_proyecto
+            )
+        finally:
+            conexion.close()
+
+    @staticmethod
     def _fila_de_registroTiempo(fila):
         empleado = EmpleadoDAO.buscar_por_id(fila[4])
         proyecto = ProyectoDao.buscar_por_id(fila[5], cargar_relaciones=False)
@@ -33,6 +53,11 @@ class RegistroTiempoDAO:
             conexion = abrir_conexion()
             cursor = conexion.cursor()
             marca = marcador_sql()
+            if not RegistroTiempoDAO._asignacion_valida(
+                cursor, marca, registroTiempo._empleado._id,
+                registroTiempo._proyecto._id_proyecto
+            ):
+                return False
             sql = (
                 "INSERT INTO registro_tiempo "
                 "(horas_trabajadas, fecha_trabajada, descripcion_tarea, empleado_id, proyecto_id) "
@@ -68,6 +93,11 @@ class RegistroTiempoDAO:
             conexion = abrir_conexion()
             cursor = conexion.cursor()
             marca = marcador_sql()
+            if not RegistroTiempoDAO._asignacion_valida(
+                cursor, marca, registroTiempo._empleado._id,
+                registroTiempo._proyecto._id_proyecto
+            ):
+                return False
             sql = (
                 "UPDATE registro_tiempo SET "
                 f"horas_trabajadas = {marca}, fecha_trabajada = {marca}, "

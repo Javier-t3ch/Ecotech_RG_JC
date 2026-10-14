@@ -7,6 +7,7 @@ from complementos.complementos import limpiar_pantalla
 
 def menu_dominio_departamento():
     while True:
+        limpiar_pantalla()
         print("\n===== DOMINIO DEPARTAMENTO =====")
         print("1. Contratar empleado (autorizado por RRHH)")
         print("2. Agregar empleado al departamento")
@@ -18,16 +19,15 @@ def menu_dominio_departamento():
         print("0. Volver al menu principal")
 
         opcion = input("Seleccione una opcion: ")
+        limpiar_pantalla()
         if opcion == "0":
-            limpiar_pantalla()
             return
         if opcion == "7":
-            limpiar_pantalla()
             main_departamento()
             continue
         if opcion not in ("1", "2", "3", "4", "5", "6"):
             print("Opcion no valida.")
-            limpiar_pantalla()
+            input("\nPresione Enter para continuar...")
             continue
 
         try:
@@ -35,6 +35,7 @@ def menu_dominio_departamento():
             departamento = DepartamentoDAO.buscar_por_id(id_departamento)
             if departamento is None:
                 print("Departamento no encontrado.")
+                input("\nPresione Enter para continuar...")
                 continue
 
             if opcion in ("1", "2", "3"):
@@ -42,6 +43,7 @@ def menu_dominio_departamento():
                 empleado = EmpleadoDAO.buscar_por_id(id_empleado)
                 if empleado is None:
                     print("Empleado no encontrado.")
+                    input("\nPresione Enter para continuar...")
                     continue
 
 
@@ -54,11 +56,13 @@ def menu_dominio_departamento():
                 if opcion == "1":
                     if empleado_asociado is not None:
                         print("El empleado ya pertenece al departamento.")
+                        input("\nPresione Enter para continuar...")
                         continue
                     id_encargado = int(input("ID del encargado de RRHH: "))
                     encargado = EmpleadoDAO.buscar_por_id(id_encargado)
                     if encargado is None:
                         print("Encargado no encontrado.")
+                        input("\nPresione Enter para continuar...")
                         continue
                     if departamento.contratar_empleado(empleado, encargado):
                         if DepartamentoDAO.agregar_empleado(departamento, empleado):
@@ -94,6 +98,7 @@ def menu_dominio_departamento():
                 proyecto = ProyectoDao.buscar_por_id(id_proyecto)
                 if proyecto is None:
                     print("Proyecto no encontrado.")
+                    input("\nPresione Enter para continuar...")
                     continue
 
                 proyecto_asociado = None
@@ -116,6 +121,7 @@ def menu_dominio_departamento():
                 elif opcion == "5":
                     if proyecto_asociado is None:
                         print("El proyecto no pertenece al departamento.")
+                        input("\nPresione Enter para continuar...")
                         continue
                     nuevo_nombre = input("Nuevo nombre del proyecto: ").strip()
                     if departamento.editar_proyecto(proyecto_asociado, nuevo_nombre):
@@ -141,3 +147,4 @@ def menu_dominio_departamento():
             print("Datos incorrectos:", error)
         except Exception as error:
             print("Ocurrio un error:", error)
+        input("\nPresione Enter para continuar...")

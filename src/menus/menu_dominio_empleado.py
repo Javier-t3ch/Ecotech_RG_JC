@@ -62,9 +62,17 @@ def menu_dominio_empleado():
                         limpiar_pantalla()
                         continue
 
+                    if not RegistroTiempoDAO.empleado_asignado(empleado._id, proyecto._id_proyecto):
+                        print("El empleado no esta asignado a ese proyecto.")
+                        input("Presione Enter para continuar...")
+                        limpiar_pantalla()
+                        continue
+
                     horas = int(input("Horas trabajadas: "))
                     if horas <= 0:
                         print("Las horas deben ser mayores que cero.")
+                        input("Presione Enter para continuar...")
+                        limpiar_pantalla()
                         continue
 
                     fecha = date.fromisoformat(
@@ -121,6 +129,8 @@ def menu_dominio_empleado():
                         limpiar_pantalla()
                     else:
                         print("Este empleado no tiene horas registradas.")
+                        input("Presione Enter para continuar...")
+                        limpiar_pantalla()
 
             except ValueError as error:
                 print("Datos incorrectos:", error)

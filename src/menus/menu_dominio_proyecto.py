@@ -1,3 +1,4 @@
+from complementos.complementos import limpiar_pantalla
 from datetime import date
 from dominio.registroTiempo import RegistroTiempo
 from persistencia.proyecto_dao import ProyectoDao
@@ -8,6 +9,7 @@ from menus.menu_proyecto import main_proyecto
 
 def menu_dominio_proyecto():
     while True:
+        limpiar_pantalla()
         print("\n===== DOMINIO PROYECTO =====")
         print("1. Asignar empleado al proyecto")
         print("2. Desvincular empleado del proyecto")
@@ -17,6 +19,7 @@ def menu_dominio_proyecto():
         print("0. Volver al menu principal")
 
         opcion = input("Seleccione una opcion: ")
+        limpiar_pantalla()
         if opcion == "0":
             return
         if opcion == "5":
@@ -24,6 +27,7 @@ def menu_dominio_proyecto():
             continue
         if opcion not in ("1", "2", "3", "4"):
             print("Opcion no valida.")
+            input("\nPresione Enter para continuar...")
             continue
 
         try:
@@ -31,17 +35,20 @@ def menu_dominio_proyecto():
             proyecto = ProyectoDao.buscar_por_id(id_proyecto)
             if proyecto is None:
                 print("Proyecto no encontrado.")
+                input("\nPresione Enter para continuar...")
                 continue
 
             if opcion == "4":
                 print("\n--- INFORME DEL PROYECTO ---")
                 print(proyecto.generar_informe())
+                input("\nPresione Enter para continuar...")
                 continue
 
             id_empleado = int(input("ID del empleado: "))
             empleado = EmpleadoDAO.buscar_por_id(id_empleado)
             if empleado is None:
                 print("Empleado no encontrado.")
+                input("\nPresione Enter para continuar...")
                 continue
 
             empleado_asignado = None
@@ -71,10 +78,12 @@ def menu_dominio_proyecto():
             elif opcion == "3":
                 if empleado_asignado is None:
                     print("Primero debes asignar al empleado al proyecto.")
+                    input("\nPresione Enter para continuar...")
                     continue
                 horas = int(input("Horas trabajadas: "))
                 if horas <= 0:
                     print("Las horas deben ser mayores que cero.")
+                    input("\nPresione Enter para continuar...")
                     continue
                 fecha = date.fromisoformat(
                     input("Fecha trabajada (AAAA-MM-DD): ").strip()
@@ -82,6 +91,7 @@ def menu_dominio_proyecto():
                 descripcion = input("Descripcion de la tarea: ").strip()
                 if not descripcion:
                     print("La descripcion no puede quedar vacia.")
+                    input("\nPresione Enter para continuar...")
                     continue
                 registro = RegistroTiempo(
                     horas_trabajadas=horas,
@@ -102,3 +112,4 @@ def menu_dominio_proyecto():
             print("Datos incorrectos:", error)
         except Exception as error:
             print("Ocurrio un error:", error)
+        input("\nPresione Enter para continuar...")

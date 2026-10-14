@@ -1,7 +1,6 @@
 from dominio.Gestion_departamento import GestionDepartamento
 from dominio.gestionPermisos import GestionPermisos
 from persistencia.crear_bd import crear_tablas
-from persistencia.crear_bd import crear_tablas
 from menus.menu_dominio_empleado import menu_dominio_empleado
 from menus.menu_dominio_departamento import menu_dominio_departamento
 from menus.menu_dominio_proyecto import menu_dominio_proyecto
@@ -59,7 +58,6 @@ def main():
             print("Opcion no valida.")
             input("Presione Enter para continuar...")
             limpiar_pantalla()
-
 
 if __name__ == "__main__":
     try:

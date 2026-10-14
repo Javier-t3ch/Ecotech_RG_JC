@@ -1,3 +1,4 @@
+from complementos.complementos import limpiar_pantalla
 from datetime import date
 from dominio.proyecto import Proyecto
 from persistencia.proyecto_dao import ProyectoDao
@@ -15,8 +16,10 @@ def mostrar_menu_proyecto():
 
 def main_proyecto():
     while True:
+        limpiar_pantalla()
         mostrar_menu_proyecto()
         opcion = input("Seleccione una opcion: ")
+        limpiar_pantalla()
 
         if opcion == "1":
             try:
@@ -25,6 +28,7 @@ def main_proyecto():
                 descripcion = input("Descripcion: ").strip()
                 if not nombre or not descripcion:
                     print("Nombre y descripcion son obligatorios.")
+                    input("\nPresione Enter para continuar...")
                     continue
                 proyecto = Proyecto(nombre, fecha_inicio, descripcion)
                 ProyectoDao.insertar(proyecto)
@@ -64,12 +68,14 @@ def main_proyecto():
                 p = ProyectoDao.buscar_por_id(id_proyecto)
                 if p is None:
                     print("Proyecto no encontrado.")
+                    input("\nPresione Enter para continuar...")
                     continue
                 nombre = input(f"Nombre [{p._nombre}]: ").strip()
                 fecha_texto = input(f"Fecha de inicio [{p._fecha_inicio}] (AAAA-MM-DD): ").strip()
                 descripcion = input(f"Descripcion [{p._descripcion}]: ").strip()
                 if not (nombre or fecha_texto or descripcion):
                     print("No ingresaste cambios.")
+                    input("\nPresione Enter para continuar...")
                     continue
                 fecha = date.fromisoformat(fecha_texto) if fecha_texto else p._fecha_inicio
                 actualizado = Proyecto(
@@ -93,6 +99,7 @@ def main_proyecto():
                 p = ProyectoDao.buscar_por_id(id_proyecto)
                 if p is None:
                     print("Proyecto no encontrado.")
+                    input("\nPresione Enter para continuar...")
                     continue
                 confirmar = input(f"Eliminar {p._nombre}? (s/n): ").strip().lower()
                 if confirmar == "s":
@@ -111,6 +118,7 @@ def main_proyecto():
             return
         else:
             print("Opcion no valida.")
+        input("\nPresione Enter para continuar...")
 
 
 if __name__ == "__main__":

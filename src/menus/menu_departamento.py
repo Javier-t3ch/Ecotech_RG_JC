@@ -15,6 +15,7 @@ def mostrar_menu_departementos():
 
 def main_departamento():
     while True:
+        limpiar_pantalla()
         mostrar_menu_departementos()
         opcion = input("Seleccione una opcion: ")
         limpiar_pantalla()
@@ -24,11 +25,13 @@ def main_departamento():
                 nombre = input("Nombre del departamento: ").strip()
                 if not nombre:
                     print("El nombre no puede estar vacio.")
+                    input("\nPresione Enter para continuar...")
                     continue
                 gerente_texto = input("ID del gerente (Enter si no tiene): ").strip()
                 id_gerente = int(gerente_texto) if gerente_texto else None
                 if id_gerente is not None and EmpleadoDAO.buscar_por_id(id_gerente) is None:
                     print("El empleado indicado como gerente no existe.")
+                    input("\nPresione Enter para continuar...")
                     continue
                 departamento = Departamento(nombre, id_gerente=id_gerente)
                 DepartamentoDAO.insertar(departamento)
@@ -68,15 +71,18 @@ def main_departamento():
                 d = DepartamentoDAO.buscar_por_id(id_departamento)
                 if d is None:
                     print("Departamento no encontrado.")
+                    input("\nPresione Enter para continuar...")
                     continue
                 nombre = input(f"Nombre [{d._nombre}]: ").strip()
                 gerente_texto = input(f"ID gerente [{d._id_gerente}] (Enter para mantener): ").strip()
                 if not nombre and not gerente_texto:
                     print("No ingresaste cambios.")
+                    input("\nPresione Enter para continuar...")
                     continue
                 id_gerente = int(gerente_texto) if gerente_texto else d._id_gerente
                 if id_gerente is not None and EmpleadoDAO.buscar_por_id(id_gerente) is None:
                     print("El gerente indicado no existe.")
+                    input("\nPresione Enter para continuar...")
                     continue
                 actualizado = Departamento(
                     nombre=nombre or d._nombre,
@@ -98,6 +104,7 @@ def main_departamento():
                 d = DepartamentoDAO.buscar_por_id(id_departamento)
                 if d is None:
                     print("Departamento no encontrado.")
+                    input("\nPresione Enter para continuar...")
                     continue
                 confirmar = input(f"Eliminar {d._nombre}? (s/n): ").strip().lower()
                 if confirmar == "s":
@@ -116,6 +123,7 @@ def main_departamento():
             return
         else:
             print("Opcion no valida.")
+        input("\nPresione Enter para continuar...")
 
 
 if __name__ == "__main__":

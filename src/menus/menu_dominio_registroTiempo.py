@@ -1,3 +1,4 @@
+from complementos.complementos import limpiar_pantalla
 from datetime import date
 from dominio.registroTiempo import RegistroTiempo
 from persistencia.empleado_dao import EmpleadoDAO
@@ -8,6 +9,7 @@ from menus.menu_registroTiempo import main_RegistroTiempo
 
 def menu_dominio_registro_tiempo():
     while True:
+        limpiar_pantalla()
         print("\n===== DOMINIO REGISTRO DE TIEMPO =====")
         print("1. Registrar horas de trabajo")
         print("2. Listar todos los registros")
@@ -17,6 +19,7 @@ def menu_dominio_registro_tiempo():
         print("0. Volver al menu principal")
 
         opcion = input("Seleccione una opcion: ")
+        limpiar_pantalla()
 
         if opcion == "0":
             return
@@ -30,17 +33,25 @@ def menu_dominio_registro_tiempo():
                 empleado = EmpleadoDAO.buscar_por_id(id_empleado)
                 if empleado is None:
                     print("Empleado no encontrado.")
+                    input("\nPresione Enter para continuar...")
                     continue
 
                 id_proyecto = int(input("ID del proyecto: "))
                 proyecto = ProyectoDao.buscar_por_id(id_proyecto)
                 if proyecto is None:
                     print("Proyecto no encontrado.")
+                    input("\nPresione Enter para continuar...")
+                    continue
+
+                if not RegistroTiempoDAO.empleado_asignado(empleado._id, proyecto._id_proyecto):
+                    print("El empleado no esta asignado a ese proyecto.")
+                    input("\nPresione Enter para continuar...")
                     continue
 
                 horas = int(input("Horas trabajadas: "))
                 if horas <= 0:
                     print("Las horas deben ser mayores que cero.")
+                    input("\nPresione Enter para continuar...")
                     continue
 
                 fecha = date.fromisoformat(
@@ -49,6 +60,7 @@ def menu_dominio_registro_tiempo():
                 descripcion = input("Descripcion de la tarea: ").strip()
                 if descripcion == "":
                     print("La descripcion no puede quedar vacia.")
+                    input("\nPresione Enter para continuar...")
                     continue
 
                 registro = RegistroTiempo(
@@ -93,6 +105,7 @@ def menu_dominio_registro_tiempo():
                 empleado = EmpleadoDAO.buscar_por_id(id_empleado)
                 if empleado is None:
                     print("Empleado no encontrado.")
+                    input("\nPresione Enter para continuar...")
                     continue
 
                 registros = RegistroTiempoDAO.listar()
@@ -128,6 +141,7 @@ def menu_dominio_registro_tiempo():
                 proyecto = ProyectoDao.buscar_por_id(id_proyecto)
                 if proyecto is None:
                     print("Proyecto no encontrado.")
+                    input("\nPresione Enter para continuar...")
                     continue
 
                 registros = RegistroTiempoDAO.listar()
@@ -161,3 +175,4 @@ def menu_dominio_registro_tiempo():
 
         else:
             print("Opcion no valida.")
+        input("\nPresione Enter para continuar...")

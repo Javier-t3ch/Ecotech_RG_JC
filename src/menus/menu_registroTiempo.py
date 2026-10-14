@@ -1,3 +1,4 @@
+from complementos.complementos import limpiar_pantalla
 from datetime import date
 from dominio.registroTiempo import RegistroTiempo
 from persistencia.registroTiempo_dao import RegistroTiempoDAO
@@ -17,8 +18,10 @@ def mostrar_menu_RegistroTiempo():
 
 def main_RegistroTiempo():
     while True:
+        limpiar_pantalla()
         mostrar_menu_RegistroTiempo()
         opcion = input("Seleccione una opcion: ")
+        limpiar_pantalla()
 
         if opcion == "1":
             try:
@@ -28,15 +31,22 @@ def main_RegistroTiempo():
                 proyecto = ProyectoDao.buscar_por_id(proyecto_id)
                 if empleado is None or proyecto is None:
                     print("Empleado o proyecto no encontrado.")
+                    input("\nPresione Enter para continuar...")
+                    continue
+                if not RegistroTiempoDAO.empleado_asignado(empleado._id, proyecto._id_proyecto):
+                    print("El empleado no esta asignado a ese proyecto.")
+                    input("\nPresione Enter para continuar...")
                     continue
                 horas = int(input("Horas trabajadas: "))
                 if horas <= 0:
                     print("Las horas deben ser mayores que cero.")
+                    input("\nPresione Enter para continuar...")
                     continue
                 fecha = date.fromisoformat(input("Fecha trabajada (AAAA-MM-DD): ").strip())
                 descripcion = input("Descripcion de la tarea: ").strip()
                 if not descripcion:
                     print("La descripcion no puede quedar vacia.")
+                    input("\nPresione Enter para continuar...")
                     continue
                 registro = RegistroTiempo(horas, fecha, descripcion, empleado, proyecto)
                 if RegistroTiempoDAO.insertar(registro):
@@ -78,6 +88,7 @@ def main_RegistroTiempo():
                 r = RegistroTiempoDAO.buscar_por_id(id_registro)
                 if r is None:
                     print("Registro no encontrado.")
+                    input("\nPresione Enter para continuar...")
                     continue
                 print("Deja el campo vacio si no deseas cambiarlo.")
                 horas_texto = input(f"Horas [{r._horas_trabajadas}]: ").strip()
@@ -88,10 +99,12 @@ def main_RegistroTiempo():
 
                 if not (horas_texto or fecha_texto or descripcion or empleado_texto or proyecto_texto):
                     print("No ingresaste cambios.")
+                    input("\nPresione Enter para continuar...")
                     continue
                 horas = int(horas_texto) if horas_texto else r._horas_trabajadas
                 if horas <= 0:
                     print("Las horas deben ser mayores que cero.")
+                    input("\nPresione Enter para continuar...")
                     continue
                 fecha = date.fromisoformat(fecha_texto) if fecha_texto else r._fecha_trabajada
                 id_empleado = int(empleado_texto) if empleado_texto else r._empleado._id
@@ -100,6 +113,11 @@ def main_RegistroTiempo():
                 proyecto = ProyectoDao.buscar_por_id(id_proyecto)
                 if empleado is None or proyecto is None:
                     print("El empleado o proyecto seleccionado no existe.")
+                    input("\nPresione Enter para continuar...")
+                    continue
+                if not RegistroTiempoDAO.empleado_asignado(empleado._id, proyecto._id_proyecto):
+                    print("El empleado no esta asignado a ese proyecto.")
+                    input("\nPresione Enter para continuar...")
                     continue
                 actualizado = RegistroTiempo(
                     horas_trabajadas=horas,
@@ -124,6 +142,7 @@ def main_RegistroTiempo():
                 r = RegistroTiempoDAO.buscar_por_id(id_registro)
                 if r is None:
                     print("Registro no encontrado.")
+                    input("\nPresione Enter para continuar...")
                     continue
                 confirmar = input(f"Eliminar registro {r._id_registro}? (s/n): ").strip().lower()
                 if confirmar == "s":
@@ -142,6 +161,7 @@ def main_RegistroTiempo():
             return
         else:
             print("Opcion no valida.")
+        input("\nPresione Enter para continuar...")
 
 
 if __name__ == "__main__":

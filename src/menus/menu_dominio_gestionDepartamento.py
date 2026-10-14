@@ -1,7 +1,9 @@
+from complementos.complementos import limpiar_pantalla
 
 
 def menu_dominio_gestionDepartamento(gestion_departamentos):
     while True:
+        limpiar_pantalla()
         print("\n===== DOMINIO GESTION DEPARTAMENTO (DEMOSTRACION) =====")
         print("1. Crear departamento")
         print("2. Buscar departamento")
@@ -11,6 +13,7 @@ def menu_dominio_gestionDepartamento(gestion_departamentos):
         print("0. Volver al menu principal")
 
         opcion = input("Seleccione una opcion: ").strip()
+        limpiar_pantalla()
 
         if opcion == "0":
             return
@@ -37,6 +40,7 @@ def menu_dominio_gestionDepartamento(gestion_departamentos):
             departamento = gestion_departamentos.buscar_departamento(nombre)
             if departamento is False:
                 print("Departamento no encontrado.")
+                input("\nPresione Enter para continuar...")
                 continue
 
             nuevo_nombre = input("Nuevo nombre: ").strip()
@@ -50,11 +54,13 @@ def menu_dominio_gestionDepartamento(gestion_departamentos):
             departamento = gestion_departamentos.buscar_departamento(nombre)
             if departamento is False:
                 print("Departamento no encontrado.")
+                input("\nPresione Enter para continuar...")
                 continue
 
             confirmar = input("Confirmar eliminacion (s/n): ").strip().lower()
             if confirmar != "s":
                 print("Eliminacion cancelada.")
+                input("\nPresione Enter para continuar...")
                 continue
 
             if gestion_departamentos.eliminar_departamento(departamento):
@@ -71,3 +77,4 @@ def menu_dominio_gestionDepartamento(gestion_departamentos):
 
         else:
             print("Opcion no valida.")
+        input("\nPresione Enter para continuar...")

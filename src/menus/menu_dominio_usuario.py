@@ -1,3 +1,4 @@
+from complementos.complementos import limpiar_pantalla
 from getpass import getpass
 
 from dominio.usuario import Usuario
@@ -13,6 +14,7 @@ def buscar_usuario(usuarios, id_usuario):
 
 def menu_dominio_usuario(usuarios):
     while True:
+        limpiar_pantalla()
         print("\n===== DOMINIO USUARIO (DEMOSTRACION) =====")
         print("1. Crear usuario para un empleado")
         print("2. Autenticar usuario")
@@ -21,6 +23,7 @@ def menu_dominio_usuario(usuarios):
         print("0. Volver al menu principal")
 
         opcion = input("Seleccione una opcion: ").strip()
+        limpiar_pantalla()
 
         if opcion == "0":
             return
@@ -31,6 +34,7 @@ def menu_dominio_usuario(usuarios):
                 empleado = EmpleadoDAO.buscar_por_id(id_empleado)
                 if empleado is None:
                     print("Empleado no encontrado. Registrelo primero en el CRUD.")
+                    input("\nPresione Enter para continuar...")
                     continue
 
                 repetido = False
@@ -39,17 +43,20 @@ def menu_dominio_usuario(usuarios):
                         repetido = True
                 if repetido:
                     print("Este empleado ya tiene un usuario en la demostracion.")
+                    input("\nPresione Enter para continuar...")
                     continue
 
                 nombre = input("Nombre de usuario: ").strip()
                 mail = input("Correo del usuario: ").strip()
                 if nombre == "" or "@" not in mail or "." not in mail:
                     print("Ingrese un nombre y un correo validos.")
+                    input("\nPresione Enter para continuar...")
                     continue
 
                 contrasenia = getpass("Contrasena (minimo 8 caracteres): ")
                 if len(contrasenia) < 8:
                     print("La contrasena debe tener al menos 8 caracteres.")
+                    input("\nPresione Enter para continuar...")
                     continue
 
                 existe_mail = False
@@ -58,6 +65,7 @@ def menu_dominio_usuario(usuarios):
                         existe_mail = True
                 if existe_mail:
                     print("Ya existe un usuario con ese correo.")
+                    input("\nPresione Enter para continuar...")
                     continue
 
                 usuario = Usuario(
@@ -87,6 +95,7 @@ def menu_dominio_usuario(usuarios):
                 usuario = buscar_usuario(usuarios, id_usuario)
                 if usuario is None:
                     print("Usuario no encontrado.")
+                    input("\nPresione Enter para continuar...")
                     continue
 
                 contrasenia = getpass("Contrasena actual: ")
@@ -121,3 +130,4 @@ def menu_dominio_usuario(usuarios):
 
         else:
             print("Opcion no valida.")
+        input("\nPresione Enter para continuar...")

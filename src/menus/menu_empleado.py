@@ -19,6 +19,7 @@ def main_empleado():
         limpiar_pantalla()
         mostrar_menu_empleado()
         opcion = input("Seleccione una opcion: ")
+        limpiar_pantalla()
 
         if opcion == "1":
             try:
@@ -40,7 +41,6 @@ def main_empleado():
         elif opcion == "2":
             try:
                 empleados = EmpleadoDAO.listar()
-                limpiar_pantalla()
                 if not empleados:
                     print("No hay empleados registrados.")
                 else:
@@ -71,6 +71,7 @@ def main_empleado():
                 empleado = EmpleadoDAO.buscar_por_id(id_empleado)
                 if empleado is None:
                     print("Empleado no encontrado.")
+                    input("\nPresione Enter para continuar...")
                     continue
                 print("Deja el campo vacio si no quieres modificarlo.")
                 nombre = input(f"Nombre [{empleado._nombre}]: ").strip()
@@ -82,6 +83,7 @@ def main_empleado():
                 cargo = input(f"Cargo [{empleado._cargo}]: ").strip()
                 if not (nombre or direccion or numero or correo or fecha_texto or salario_texto or cargo):
                     print("No ingresaste cambios.")
+                    input("\nPresione Enter para continuar...")
                     continue
                 fecha = date.fromisoformat(fecha_texto) if fecha_texto else empleado._fecha_contrato
                 salario = float(salario_texto) if salario_texto else empleado._salario
@@ -110,6 +112,7 @@ def main_empleado():
                 empleado = EmpleadoDAO.buscar_por_id(id_empleado)
                 if empleado is None:
                     print("Empleado no encontrado.")
+                    input("\nPresione Enter para continuar...")
                     continue
                 print(empleado.mostrar_datos())
                 confirmar = input("Confirmar eliminacion (s/n): ").lower().strip()
@@ -126,10 +129,10 @@ def main_empleado():
                 print("Error al eliminar el empleado:", error)
 
         elif opcion == "0":
-            limpiar_pantalla()
             return
         else:
             print("Opcion no valida.")
+        input("\nPresione Enter para continuar...")
 
 
 if __name__ == "__main__":
